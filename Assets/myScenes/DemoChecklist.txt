@@ -1,0 +1,20 @@
+
+Demo:
+SceneLoader in Tutorial Scene - "isDemo" checked?
+LevelInfoHandler in All Demo Game Scenes - "isDemoBuild" checked?
+
+Expo:
+AutoPlayTrailer in UI Canvas prefab, tutorial and main menu.
+Change Demo Build stage selections from DEMOController.OpenRedirectToSteam to OpenQRcode
+
+
+All:
+
+Change Demo Build stage selections from DEMOController.OpenQRcode to OpenRedirectToSteam...
+
+Main Menu Stage Select shows full version, expo version or locked demo versions?
+
+Build Settings contains the correct levels to load?
+
+
+
