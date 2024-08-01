@@ -16,6 +16,7 @@ public class LaguePortal : MonoBehaviour {
     private Vector3 thisTransPos;
     private List<PortalTraveller> trackedTravellers;
 
+
     void Awake () {
         thisTransPos = transform.position;
         trackedTravellers = new List<PortalTraveller> ();
@@ -25,14 +26,6 @@ public class LaguePortal : MonoBehaviour {
         HandleTravellers ();
     }
 
-    public void RemoveTraveller(PortalTraveller traveller)
-    {
-        if (trackedTravellers.Contains(traveller))
-        {
-            traveller.ExitPortalThreshold();
-            trackedTravellers.Remove(traveller);
-        }
-    }
 
     private Vector3 offsetFromPortal;
     private int portalSide = 0;
@@ -74,17 +67,22 @@ public class LaguePortal : MonoBehaviour {
                 positionOld.y = traveller.graphicsClone.transform.position.y;
                 var rotOld = Quaternion.Euler(travellerT.rotation.eulerAngles + new Vector3(0f, 180f, 0f));
 
-                traveller.Teleport (transform, linkedPortal.transform, m.GetColumn (3), m.rotation);
-                traveller.graphicsClone.transform.SetPositionAndRotation (positionOld, rotOld);
+                traveller.Teleport(transform, linkedPortal.transform, m.GetColumn (3), m.rotation);
+                traveller.graphicsClone.transform.SetPositionAndRotation(positionOld, rotOld);
 
                 //print("slice numbers are wrong in this single frame");
                 //UpdateSliceParams(traveller);
 
                 // Can't rely on OnTriggerEnter/Exit to be called next frame since it depends on when FixedUpdate runs
                 linkedPortal.OnTravellerEnterPortal(traveller);
-                trackedTravellers.RemoveAt (i);
+
+                //print("traveller entered from script");
+                //trackedTravellers.RemoveAt(i); removal happens in OnTravEnter
+                //RemoveTraveller (traveller);
                 i--; // dont skip an item bc you delete this and i increases, so stay on i after list moves down -1
-                
+
+
+                //---print("portal traveller was teleported");
             } 
             else 
             {
@@ -96,6 +94,7 @@ public class LaguePortal : MonoBehaviour {
                 
                 traveller.previousOffsetFromPortal = offsetFromPortal;
                 UpdateSliceParams (traveller);
+                //print("portal traveller was updated");
             }
 
 
@@ -205,11 +204,28 @@ public class LaguePortal : MonoBehaviour {
 
 
     void OnTravellerEnterPortal (PortalTraveller traveller) {
+
         if (!trackedTravellers.Contains (traveller)) {
+            traveller.CurrentLaguePortal?.RemoveTraveller(traveller);
             traveller.EnterPortalThreshold ();
             traveller.previousOffsetFromPortal = traveller.transform.position - transform.position;
             trackedTravellers.Add (traveller);
+            //traveller.CurrentLaguePortal = this;
             UpdateSliceParams(traveller);
+            //traveller.TeleportsBeforeExit++;
+            //print("-- traveller entered, tpsbfE = " + traveller.TeleportsBeforeExit);
+        }
+    }
+
+    public void RemoveTraveller(PortalTraveller traveller)
+    {
+        if (trackedTravellers.Contains(traveller))
+        {
+            //traveller.ExitPortalThreshold();
+            traveller.ExitPortalThreshold();
+            trackedTravellers.Remove(traveller);
+            //print("-- traveller exited");
+            //traveller.TeleportsBeforeExit = 0;
         }
     }
 
@@ -229,11 +245,12 @@ public class LaguePortal : MonoBehaviour {
 
     void OnTriggerExit (Collider other) {
         var traveller = other.GetComponent<PortalTraveller> ();
-        if (traveller && trackedTravellers.Contains (traveller)) {
-            traveller.CurrentLaguePortal = null;
+        if (traveller && trackedTravellers.Contains(traveller)) {
             UpdateSliceParams (traveller);
-            trackedTravellers.Remove (traveller);
-            traveller.ExitPortalThreshold ();
+            RemoveTraveller(traveller);
+            //traveller.PreviousLaguePortal = this;
+            traveller.CurrentLaguePortal = null;
+            //trackedTravellers.Remove (traveller);
         }
     }
 

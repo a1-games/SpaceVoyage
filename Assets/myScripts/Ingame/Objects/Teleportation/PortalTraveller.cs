@@ -6,11 +6,14 @@ public class PortalTraveller : MonoBehaviour {
     public GameObject graphicsObject;
     public GameObject graphicsClone { get; set; }
     public Vector3 previousOffsetFromPortal { get; set; }
+    //public LaguePortal PreviousLaguePortal { get; set; }
     public LaguePortal CurrentLaguePortal { get; set; }
 
     public Material[] originalMaterials { get; set; }
     public Material[] cloneMaterials { get; set; }
     public Quaternion StartRotation { get; private set; }
+    // dumb fix with the traveller tp'ing back again because I can't figure out the problem
+    //public int TeleportsBeforeExit { get; set; } = 0;
 
     private void Start()
     {
