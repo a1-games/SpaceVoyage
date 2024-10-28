@@ -99664,8 +99664,8 @@ PrefabInstance:
       value: EventSystem
       objectReference: {fileID: 0}
     - target: {fileID: 8822185708758919484, guid: 612e621aa3e403a44802e27b98b15b31, type: 3}
-      propertyPath: m_DefaultControlScheme
-      value: GameControls
+      propertyPath: m_DefaultActionMap
+      value: 272f6d14-89ba-496f-b7ff-215263d3219f
       objectReference: {fileID: 0}
     - target: {fileID: 8822185708758919485, guid: 612e621aa3e403a44802e27b98b15b31, type: 3}
       propertyPath: m_RootOrder
@@ -99712,7 +99712,11 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8822185708758919487, guid: 612e621aa3e403a44802e27b98b15b31, type: 3}
-      propertyPath: dontDestroy
+      propertyPath: _dontDestroy
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8822185708758919487, guid: 612e621aa3e403a44802e27b98b15b31, type: 3}
+      propertyPath: _debugComments
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
