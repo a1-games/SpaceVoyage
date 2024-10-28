@@ -130,6 +130,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1815595138}
     m_Modifications:
+    - target: {fileID: 696265763441894348, guid: 18952a0904cea9040a47dbaf1a7cb26f, type: 3}
+      propertyPath: <actAsPrePlacedObject>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 920028030655458222, guid: 18952a0904cea9040a47dbaf1a7cb26f, type: 3}
       propertyPath: m_Name
       value: Button_GoRight (3)
@@ -180,7 +184,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2213863313765288336, guid: 18952a0904cea9040a47dbaf1a7cb26f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 18952a0904cea9040a47dbaf1a7cb26f, type: 3}

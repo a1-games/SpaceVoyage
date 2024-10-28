@@ -612,6 +612,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Button_GoRight Multiple
       objectReference: {fileID: 0}
+    - target: {fileID: 7972608806490545907, guid: eb318e81c4de9494e996046a5d48a8cf, type: 3}
+      propertyPath: <actAsPrePlacedObject>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8277846554094551959, guid: eb318e81c4de9494e996046a5d48a8cf, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -658,7 +662,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8769915340705674415, guid: eb318e81c4de9494e996046a5d48a8cf, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9193439282362397681, guid: eb318e81c4de9494e996046a5d48a8cf, type: 3}
       propertyPath: m_IsActive
