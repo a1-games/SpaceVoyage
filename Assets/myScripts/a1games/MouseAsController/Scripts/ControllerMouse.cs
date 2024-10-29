@@ -68,6 +68,10 @@ public class CustomInspectorControllerMouse : Editor
         _controllerMouseScript._cursorBehaviour = (ControllerMouse.ControllerMouseSpeedBehaviour)GUILayout.Toolbar((int)_controllerMouseScript._cursorBehaviour, new string[] { ((ControllerMouse.ControllerMouseSpeedBehaviour)0).ToString(), ((ControllerMouse.ControllerMouseSpeedBehaviour)1).ToString() });
         GUILayout.Space(5);
         _controllerMouseScript.ControllerMouseSpeed = EditorGUILayout.FloatField(new GUIContent("Controller Mouse Speed"), _controllerMouseScript.ControllerMouseSpeed);
+        GUILayout.Space(5);
+        _controllerMouseScript.StickDriftThreshhold = EditorGUILayout.FloatField(new GUIContent("Stick Drift Threshhold"), _controllerMouseScript.StickDriftThreshhold);
+        GUILayout.Space(5);
+        _controllerMouseScript.TimeBeforeStopMovingStick = EditorGUILayout.FloatField(new GUIContent("Seconds to wait before stopping movement on release"), _controllerMouseScript.TimeBeforeStopMovingStick);
 
 
         GUILayout.Space(5);
@@ -136,11 +140,17 @@ public class ControllerMouse : MonoBehaviour
     private bool ConstantMouseSpeed { get => _cursorBehaviour == ControllerMouseSpeedBehaviour.ConstantSpeed; }
     [field: SerializeField] public float ControllerMouseSpeed { get; set; } = 8f;
 
+    // How many seconds after releasing the stick should we stop moving?
+    // (Stick issues can trigger release on random frames if this isn't above 0)
+    [field: SerializeField] public float TimeBeforeStopMovingStick { get; set; } = 0.05f;
+
+    // How large must the magnitude of the stick be before we count it as an intentional move?
+    [field: SerializeField] public float StickDriftThreshhold { get; set; } = 0.05f;
+
     // This is only used in one calculation. I'm not sure if it saves memory to reuse it or if it could just be replace with var ? - Better safe than sorry
     private Vector2 mousePosition;
     // Controller stick direction
     private Vector2 mouseDirection;
-
 
 
     // ---------------------------------------------------------------------------------------
@@ -171,16 +181,17 @@ public class ControllerMouse : MonoBehaviour
             Destroy(this.gameObject);
 
         _rebindMouseController = this.GetComponent<RebindMouseController>();
-        _rebindMouseController.FakeAwake(OnSimulateMouse, OnLeftClick);
+        //_rebindMouseController.FakeAwake(OnSimulateMouse, OnLeftClick);
     }
 
 
     private void Update()
     {
+        if (RebindMouseController.IsRebinding) return;
         if (stoppedMovingStick)
         {
             stoppedMovingStickTimer += Time.deltaTime;
-            if (stoppedMovingStickTimer >= timeBeforeStopMovingStick)
+            if (stoppedMovingStickTimer >= TimeBeforeStopMovingStick)
             {
                 stoppedMovingStick = false;
                 stoppedMovingStickTimer = 0f;
@@ -205,17 +216,15 @@ public class ControllerMouse : MonoBehaviour
     // broken controllers set passthrough to 0 for weird frames, this counteracts that issue
     private bool stoppedMovingStick = false;
     private float stoppedMovingStickTimer = 0f;
-    [SerializeField] private float timeBeforeStopMovingStick = 0.1f;
-
-    [SerializeField] private float stickDriftThreshhold = 0.01f;
 
     public void OnSimulateMouse(InputAction.CallbackContext context)
     {
+        if (RebindMouseController.IsRebinding) return;
         var vec = context.ReadValue<Vector2>();
         if (ConstantMouseSpeed)
             vec = vec.normalized;
 
-        if (vec.magnitude > stickDriftThreshhold)
+        if (vec.magnitude > StickDriftThreshhold)
         {
             if (!isMovingControllerMouse)
             {
@@ -229,8 +238,8 @@ public class ControllerMouse : MonoBehaviour
             stoppedMovingStickTimer = 0f;
             mouseDirection = vec;
             OnCursorMove_WithController.Invoke(vec);
-            if (DebugComments)
-                Debug.Log("Is moving cursor by controller | " + vec);
+            //if (DebugComments)
+            //    Debug.Log("Is moving cursor by controller | " + vec);
         }
         else
         {
@@ -245,19 +254,23 @@ public class ControllerMouse : MonoBehaviour
     // context.performed isn't working for this either. I have no clue.
     public void OnLeftClick(InputAction.CallbackContext context)
     {
+        if (RebindMouseController.IsRebinding) return;
+
         // 1 is down, 0 is up
         var clickID = context.ReadValue<Single>();
-        if (DebugComments)
-            Debug.Log("Clicked MouseLeft" + (clickID == 0 ? "Up" : "Down") + " as controller CLICK phase: ");
         if (clickID == 1)
         {
             OnLeftClickDown_WithController.Invoke();
             MouseOperations.MouseEvent(MouseOperations.MouseEventFlags.LeftDown);
+            if (DebugComments)
+                Debug.Log("Clicked MouseLeftDown as controller CLICK phase: " + context.phase);
         }
         if (clickID == 0)
         {
             OnLeftClickUp_WithController.Invoke();
             MouseOperations.MouseEvent(MouseOperations.MouseEventFlags.LeftUp);
+            if (DebugComments)
+                Debug.Log("Clicked MouseLeftUp as controller CLICK phase: " + context.phase);
         }
     }
 

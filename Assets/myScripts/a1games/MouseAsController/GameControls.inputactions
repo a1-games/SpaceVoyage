@@ -495,6 +495,118 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Mouse Simulation With Controller",
+            "id": "fafdf6b7-a731-454e-a755-e19818540ba1",
+            "actions": [
+                {
+                    "name": "Cursor Movement",
+                    "type": "Value",
+                    "id": "4f843ec8-fd5a-4b90-9636-6367a85cb26d",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Mouse Click Simulation",
+                    "type": "PassThrough",
+                    "id": "385345e1-dfae-4831-9bb4-c2420ace1298",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "821730cb-0fb7-4d14-a221-89227024a5fe",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "GameControls",
+                    "action": "Cursor Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "DPad",
+                    "id": "9efd4f83-0eb4-49b0-976f-959a1b1f44ba",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Cursor Movement",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "7611300d-4876-4fc1-835b-6cafd96836a1",
+                    "path": "<Gamepad>/dpad/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "GameControls",
+                    "action": "Cursor Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "9a048b60-fe31-4d37-87c6-6557f137ae3d",
+                    "path": "<Gamepad>/dpad/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "GameControls",
+                    "action": "Cursor Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "ddfccf48-2ee1-4a72-971b-8874574e0e29",
+                    "path": "<Gamepad>/dpad/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "GameControls",
+                    "action": "Cursor Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "270f1914-a0d9-4130-8964-e1811cf4d25f",
+                    "path": "<Gamepad>/dpad/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "GameControls",
+                    "action": "Cursor Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "3b77a20c-3eb7-49b7-a34f-e7c0561c0023",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "GameControls",
+                    "action": "Mouse Click Simulation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2aea57f4-483e-4559-af23-a5c94b8f4133",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "GameControls",
+                    "action": "Mouse Click Simulation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

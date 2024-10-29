@@ -19,7 +19,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
         protected void OnEnable()
         {
             // Hook into all updateBindingUIEvents on all RebindActionUI components in our hierarchy.
-            var rebindUIComponents = transform.GetComponentsInChildren<RebindActionUI>();
+            var rebindUIComponents = transform.GetComponentsInChildren<MouseControllerRebindKey>();
             foreach (var component in rebindUIComponents)
             {
                 component.updateBindingUIEvent.AddListener(OnUpdateBindingDisplay);
@@ -27,7 +27,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             }
         }
 
-        protected void OnUpdateBindingDisplay(RebindActionUI component, string bindingDisplayString, string deviceLayoutName, string controlPath)
+        protected void OnUpdateBindingDisplay(MouseControllerRebindKey component, string bindingDisplayString, string deviceLayoutName, string controlPath)
         {
             if (string.IsNullOrEmpty(deviceLayoutName) || string.IsNullOrEmpty(controlPath))
                 return;
