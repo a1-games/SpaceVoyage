@@ -123,6 +123,22 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &7194151 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8251709909521159671, guid: 3357927906fbcbb4ca80d6552b758ab2, type: 3}
+  m_PrefabInstance: {fileID: 1820782415}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &55147898 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1167336254411993853, guid: 3357927906fbcbb4ca80d6552b758ab2, type: 3}
+  m_PrefabInstance: {fileID: 1820782415}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &105582608
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -400,6 +416,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 636060089}
     m_Modifications:
+    - target: {fileID: 4304686204459947666, guid: 3357927906fbcbb4ca80d6552b758ab2, type: 3}
+      propertyPath: _bindingID
+      value: 821730cb-0fb7-4d14-a221-89227024a5fe
+      objectReference: {fileID: 0}
+    - target: {fileID: 4304686204459947666, guid: 3357927906fbcbb4ca80d6552b758ab2, type: 3}
+      propertyPath: _rebindOverlay
+      value: 
+      objectReference: {fileID: 7194151}
+    - target: {fileID: 4304686204459947666, guid: 3357927906fbcbb4ca80d6552b758ab2, type: 3}
+      propertyPath: _actionToRebind
+      value: 
+      objectReference: {fileID: -6913249726388551937, guid: e5777967b97b6f64781c54074f915820, type: 3}
+    - target: {fileID: 4304686204459947666, guid: 3357927906fbcbb4ca80d6552b758ab2, type: 3}
+      propertyPath: _rebindOverlayMessage
+      value: 
+      objectReference: {fileID: 55147898}
     - target: {fileID: 4913413208669999963, guid: 3357927906fbcbb4ca80d6552b758ab2, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -484,10 +516,62 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6655517960335577379, guid: 3357927906fbcbb4ca80d6552b758ab2, type: 3}
+      propertyPath: _bindingID
+      value: 2aea57f4-483e-4559-af23-a5c94b8f4133
+      objectReference: {fileID: 0}
+    - target: {fileID: 6655517960335577379, guid: 3357927906fbcbb4ca80d6552b758ab2, type: 3}
+      propertyPath: m_BindingId
+      value: 2aea57f4-483e-4559-af23-a5c94b8f4133
+      objectReference: {fileID: 0}
+    - target: {fileID: 6655517960335577379, guid: 3357927906fbcbb4ca80d6552b758ab2, type: 3}
+      propertyPath: _rebindOverlay
+      value: 
+      objectReference: {fileID: 7194151}
+    - target: {fileID: 6655517960335577379, guid: 3357927906fbcbb4ca80d6552b758ab2, type: 3}
+      propertyPath: _actionToRebind
+      value: 
+      objectReference: {fileID: -590883054576643802, guid: e5777967b97b6f64781c54074f915820, type: 3}
+    - target: {fileID: 6655517960335577379, guid: 3357927906fbcbb4ca80d6552b758ab2, type: 3}
+      propertyPath: _rebindOverlayMessage
+      value: 
+      objectReference: {fileID: 55147898}
     - target: {fileID: 7976735233569951165, guid: 3357927906fbcbb4ca80d6552b758ab2, type: 3}
       propertyPath: m_Name
       value: ControllerMouseRebind
       objectReference: {fileID: 0}
+    - target: {fileID: 8045379240061695433, guid: 3357927906fbcbb4ca80d6552b758ab2, type: 3}
+      propertyPath: _bindingID
+      value: 9efd4f83-0eb4-49b0-976f-959a1b1f44ba
+      objectReference: {fileID: 0}
+    - target: {fileID: 8045379240061695433, guid: 3357927906fbcbb4ca80d6552b758ab2, type: 3}
+      propertyPath: _rebindOverlay
+      value: 
+      objectReference: {fileID: 7194151}
+    - target: {fileID: 8045379240061695433, guid: 3357927906fbcbb4ca80d6552b758ab2, type: 3}
+      propertyPath: _actionToRebind
+      value: 
+      objectReference: {fileID: -6913249726388551937, guid: e5777967b97b6f64781c54074f915820, type: 3}
+    - target: {fileID: 8045379240061695433, guid: 3357927906fbcbb4ca80d6552b758ab2, type: 3}
+      propertyPath: _rebindOverlayMessage
+      value: 
+      objectReference: {fileID: 55147898}
+    - target: {fileID: 8550702072840657810, guid: 3357927906fbcbb4ca80d6552b758ab2, type: 3}
+      propertyPath: _bindingID
+      value: 3b77a20c-3eb7-49b7-a34f-e7c0561c0023
+      objectReference: {fileID: 0}
+    - target: {fileID: 8550702072840657810, guid: 3357927906fbcbb4ca80d6552b758ab2, type: 3}
+      propertyPath: _rebindOverlay
+      value: 
+      objectReference: {fileID: 7194151}
+    - target: {fileID: 8550702072840657810, guid: 3357927906fbcbb4ca80d6552b758ab2, type: 3}
+      propertyPath: _actionToRebind
+      value: 
+      objectReference: {fileID: -590883054576643802, guid: e5777967b97b6f64781c54074f915820, type: 3}
+    - target: {fileID: 8550702072840657810, guid: 3357927906fbcbb4ca80d6552b758ab2, type: 3}
+      propertyPath: _rebindOverlayMessage
+      value: 
+      objectReference: {fileID: 55147898}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3357927906fbcbb4ca80d6552b758ab2, type: 3}
 --- !u!224 &1820782416 stripped

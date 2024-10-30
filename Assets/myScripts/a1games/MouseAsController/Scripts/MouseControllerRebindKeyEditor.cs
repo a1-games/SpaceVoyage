@@ -6,26 +6,50 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 
-
 /// <summary>
+/// This script is a modified version of the script that Unity provides with their InputActionRebinding sample
+/// ---
 /// A custom inspector for <see cref="MouseControllerRebindKey"/> which provides a more convenient way for
 /// picking the binding which to rebind.
 /// </summary>
 [CustomEditor(typeof(MouseControllerRebindKey))]
 public class MouseControllerRebindKeyEditor : Editor
 {
+    private SerializedProperty _actionToRebind;
+    private SerializedProperty _bindingID;
+    private SerializedProperty _bindingNameText;
+    private SerializedProperty _rebindOverlay;
+    private SerializedProperty _rebindOverlayMessage;
+    private SerializedProperty _onRebindStart;
+    private SerializedProperty _onRebindEnded;
+    private SerializedProperty _onUpdateBindingUIEvent;
+    private SerializedProperty _onRebindAbortedMessage;
+    //private SerializedProperty m_DisplayStringOptionsProperty;
+
+    private GUIContent m_BindingLabel = new GUIContent("Binding");
+    private GUIContent m_DisplayOptionsLabel = new GUIContent("Display Options");
+    private GUIContent m_UILabel = new GUIContent("UI");
+    private GUIContent m_EventsLabel = new GUIContent("Events");
+    private GUIContent[] m_BindingOptions;
+    private string[] m_BindingOptionValues;
+    private int m_SelectedBindingOption;
+
+    private static class Styles
+    {
+        public static GUIStyle boldLabel = new GUIStyle("MiniBoldLabel");
+    }
+
     protected void OnEnable()
     {
-        m_ActionProperty = serializedObject.FindProperty("m_Action");
-        m_BindingIdProperty = serializedObject.FindProperty("m_BindingId");
-        m_BindingTextProperty = serializedObject.FindProperty("m_BindingText");
-        m_RebindOverlayProperty = serializedObject.FindProperty("m_RebindOverlay");
-        m_RebindTextProperty = serializedObject.FindProperty("m_RebindText");
-        m_UpdateBindingUIEventProperty = serializedObject.FindProperty("m_UpdateBindingUIEvent");
-        m_RebindStartEventProperty = serializedObject.FindProperty("m_RebindStartEvent");
-        m_RebindStopEventProperty = serializedObject.FindProperty("m_RebindStopEvent");
-        m_OnAbortedMessage = serializedObject.FindProperty("m_OnAbortedMessage");
-        //m_DisplayStringOptionsProperty = serializedObject.FindProperty("m_DisplayStringOptions");
+        _actionToRebind = serializedObject.FindProperty("_actionToRebind");
+        _bindingID = serializedObject.FindProperty("_bindingID");
+        _bindingNameText = serializedObject.FindProperty("_bindingNameText");
+        _rebindOverlay = serializedObject.FindProperty("_rebindOverlay");
+        _rebindOverlayMessage = serializedObject.FindProperty("_rebindOverlayMessage");
+        _onUpdateBindingUIEvent = serializedObject.FindProperty("_onUpdateBindingUIEvent");
+        _onRebindStart = serializedObject.FindProperty("_onRebindStart");
+        _onRebindEnded = serializedObject.FindProperty("_onRebindEnded");
+        _onRebindAbortedMessage = serializedObject.FindProperty("_onRebindAbortedMessage");
 
         RefreshBindingOptions();
     }
@@ -38,20 +62,15 @@ public class MouseControllerRebindKeyEditor : Editor
         EditorGUILayout.LabelField(m_BindingLabel, Styles.boldLabel);
         using (new EditorGUI.IndentLevelScope())
         {
-            EditorGUILayout.PropertyField(m_ActionProperty);
+            EditorGUILayout.PropertyField(_actionToRebind);
 
             var newSelectedBinding = EditorGUILayout.Popup(m_BindingLabel, m_SelectedBindingOption, m_BindingOptions);
             if (newSelectedBinding != m_SelectedBindingOption)
             {
                 var bindingId = m_BindingOptionValues[newSelectedBinding];
-                m_BindingIdProperty.stringValue = bindingId;
+                _bindingID.stringValue = bindingId;
                 m_SelectedBindingOption = newSelectedBinding;
             }
-
-            //var optionsOld = (InputBinding.DisplayStringOptions)m_DisplayStringOptionsProperty.intValue;
-            //var optionsNew = (InputBinding.DisplayStringOptions)EditorGUILayout.EnumFlagsField(m_DisplayOptionsLabel, optionsOld);
-            //if (optionsOld != optionsNew)
-            //    m_DisplayStringOptionsProperty.intValue = (int)optionsNew;
         }
 
         // UI section.
@@ -59,9 +78,9 @@ public class MouseControllerRebindKeyEditor : Editor
         EditorGUILayout.LabelField(m_UILabel, Styles.boldLabel);
         using (new EditorGUI.IndentLevelScope())
         {
-            EditorGUILayout.PropertyField(m_BindingTextProperty);
-            EditorGUILayout.PropertyField(m_RebindOverlayProperty);
-            EditorGUILayout.PropertyField(m_RebindTextProperty);
+            EditorGUILayout.PropertyField(_bindingNameText);
+            EditorGUILayout.PropertyField(_rebindOverlayMessage);
+            EditorGUILayout.PropertyField(_rebindOverlay);
         }
 
         // Events section.
@@ -69,10 +88,10 @@ public class MouseControllerRebindKeyEditor : Editor
         EditorGUILayout.LabelField(m_EventsLabel, Styles.boldLabel);
         using (new EditorGUI.IndentLevelScope())
         {
-            EditorGUILayout.PropertyField(m_RebindStartEventProperty);
-            EditorGUILayout.PropertyField(m_RebindStopEventProperty);
-            EditorGUILayout.PropertyField(m_OnAbortedMessage);
-            EditorGUILayout.PropertyField(m_UpdateBindingUIEventProperty);
+            EditorGUILayout.PropertyField(_onRebindStart);
+            EditorGUILayout.PropertyField(_onRebindEnded);
+            EditorGUILayout.PropertyField(_onRebindAbortedMessage);
+            EditorGUILayout.PropertyField(_onUpdateBindingUIEvent);
         }
 
         if (EditorGUI.EndChangeCheck())
@@ -84,7 +103,7 @@ public class MouseControllerRebindKeyEditor : Editor
 
     protected void RefreshBindingOptions()
     {
-        var actionReference = (InputActionReference)m_ActionProperty.objectReferenceValue;
+        var actionReference = (InputActionReference)_actionToRebind.objectReferenceValue;
         var action = actionReference?.action;
 
         if (action == null)
@@ -102,20 +121,12 @@ public class MouseControllerRebindKeyEditor : Editor
         m_BindingOptionValues = new string[bindingCount];
         m_SelectedBindingOption = -1;
 
-        var currentBindingId = m_BindingIdProperty.stringValue;
+        var currentBindingId = _bindingID.stringValue;
         for (var i = 0; i < bindingCount; ++i)
         {
             var binding = bindings[i];
             var bindingId = binding.id.ToString();
             var haveBindingGroups = !string.IsNullOrEmpty(binding.groups);
-
-            // If we don't have a binding groups (control schemes), show the device that if there are, for example,
-            // there are two bindings with the display string "A", the user can see that one is for the keyboard
-            // and the other for the gamepad.
-            //var displayOptions =
-            //    InputBinding.DisplayStringOptions.DontUseShortDisplayNames | InputBinding.DisplayStringOptions.IgnoreBindingOverrides;
-            //if (!haveBindingGroups)
-            //    displayOptions |= InputBinding.DisplayStringOptions.DontOmitDevice;
 
             // Create display string.
             var displayString = action.GetBindingDisplayString(i, InputBinding.DisplayStringOptions.IgnoreBindingOverrides);
@@ -150,29 +161,6 @@ public class MouseControllerRebindKeyEditor : Editor
         }
     }
 
-    private SerializedProperty m_ActionProperty;
-    private SerializedProperty m_BindingIdProperty;
-    private SerializedProperty m_BindingTextProperty;
-    private SerializedProperty m_RebindOverlayProperty;
-    private SerializedProperty m_RebindTextProperty;
-    private SerializedProperty m_RebindStartEventProperty;
-    private SerializedProperty m_RebindStopEventProperty;
-    private SerializedProperty m_UpdateBindingUIEventProperty;
-    private SerializedProperty m_OnAbortedMessage;
-    //private SerializedProperty m_DisplayStringOptionsProperty;
-
-    private GUIContent m_BindingLabel = new GUIContent("Binding");
-    private GUIContent m_DisplayOptionsLabel = new GUIContent("Display Options");
-    private GUIContent m_UILabel = new GUIContent("UI");
-    private GUIContent m_EventsLabel = new GUIContent("Events");
-    private GUIContent[] m_BindingOptions;
-    private string[] m_BindingOptionValues;
-    private int m_SelectedBindingOption;
-
-    private static class Styles
-    {
-        public static GUIStyle boldLabel = new GUIStyle("MiniBoldLabel");
-    }
 }
 
 #endif

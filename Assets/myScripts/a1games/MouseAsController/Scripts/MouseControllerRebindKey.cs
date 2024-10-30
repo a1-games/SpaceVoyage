@@ -1,112 +1,66 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
 using UnityEngine.Events;
-using static UnityEngine.InputSystem.InputBinding;
+
+/// <summary>
+/// This script is a heavily modified version of the script that Unity provides with their InputActionRebinding sample
+/// </summary>
+
 
 public class MouseControllerRebindKey : MonoBehaviour
 {
+    [SerializeField] private InputActionReference _actionToRebind;
+    public InputActionReference ActionToRebind
+    {
+        get => _actionToRebind;
+        set
+        {
+            _actionToRebind = value;
+            UpdateBindingDisplay();
+        }
+    }
 
-    [Tooltip("Reference to action that is to be rebound from the UI.")]
-    [SerializeField]
-    private InputActionReference m_Action;
+    [SerializeField] private string _bindingID;
+    public string BindingID
+    {
+        get => _bindingID;
+        set
+        {
+            _bindingID = value;
+            UpdateBindingDisplay();
+        }
+    }
 
-    [SerializeField]
-    private string m_BindingId;
+    [SerializeField] private TMP_Text _bindingNameText;
+    public TMP_Text BindingNameText { get => _bindingNameText; }
 
-    //[SerializeField]
-    //private InputBinding.DisplayStringOptions m_DisplayStringOptions;
+    [SerializeField] private GameObject _rebindOverlay;
+    [SerializeField] private TMP_Text _rebindOverlayMessage;
 
+    [SerializeField] private UpdateBindingUIEvent _onUpdateBindingUIEvent;
+    public UpdateBindingUIEvent OnUpdateBindingUIEvent { get => _onUpdateBindingUIEvent; }
 
-    [Tooltip("Text label that will receive the current, formatted binding string.")]
-    [SerializeField]
-    private TMP_Text m_BindingText;
+    [SerializeField] private InteractiveRebindEvent _onRebindStart;
+    [SerializeField] private InteractiveRebindEvent _onRebindEnded;
+    [SerializeField] private UnityEvent<string> _onRebindAbortedMessage;
 
-    [Tooltip("Optional UI that will be shown while a rebind is in progress.")]
-    [SerializeField]
-    private GameObject m_RebindOverlay;
-
-    [Tooltip("Optional  TMP_Text label that will be updated with prompt for user input.")]
-    [SerializeField]
-    private TMP_Text m_RebindText;
-
-    [Tooltip("Event that is triggered when the way the binding is display should be updated. This allows displaying "
-        + "bindings in custom ways, e.g. using images instead of text.")]
-    [SerializeField]
-    private UpdateBindingUIEvent m_UpdateBindingUIEvent;
-
-    public UpdateBindingUIEvent updateBindingUIEvent { get => m_UpdateBindingUIEvent; }
-
-    [Tooltip("Event that is triggered when an interactive rebind is being initiated. This can be used, for example, "
-        + "to implement custom UI behavior while a rebind is in progress. It can also be used to further "
-        + "customize the rebind.")]
-    [SerializeField]
-    private InteractiveRebindEvent m_RebindStartEvent;
-
-    [Tooltip("Event that is triggered when an interactive rebind is complete or has been aborted.")]
-    [SerializeField]
-    private InteractiveRebindEvent m_RebindStopEvent;
-
-    [Tooltip("Event that returns a string with information as to why the rebind was aborted")]
-    [SerializeField]
-    private UnityEvent<string> m_OnAbortedMessage;
-
-    private InputActionRebindingExtensions.RebindingOperation m_RebindOperation;
-
-    private static List<MouseControllerRebindKey> s_RebindActionUIs;
+    private InputActionRebindingExtensions.RebindingOperation _rebindOperation;
+    private static List<MouseControllerRebindKey> _rebindActionUIs;
 
     [Serializable]
     public class UpdateBindingUIEvent : UnityEvent<MouseControllerRebindKey, string, string, string> { }
-
     [Serializable]
     public class InteractiveRebindEvent : UnityEvent<MouseControllerRebindKey, InputActionRebindingExtensions.RebindingOperation> { }
 
-    // We want the label for the action name to update in edit mode, too, so
-    // we kick that off from here.
-#if UNITY_EDITOR
-    protected void OnValidate()
-    {
-        UpdateBindingDisplay();
-    }
 
+#if UNITY_EDITOR
+    // Refresh button name outside of play mode
+    protected void OnValidate() { UpdateBindingDisplay(); }
 #endif
 
-
-    /// <summary>
-    /// Reference to the action that is to be rebound.
-    /// </summary>
-    public InputActionReference actionReference
-    {
-        get => m_Action;
-        set
-        {
-            m_Action = value;
-            UpdateBindingDisplay();
-        }
-    }
-
-    /// <summary>
-    /// ID (in string form) of the binding that is to be rebound on the action.
-    /// </summary>
-    /// <seealso cref="InputBinding.id"/>
-    public string bindingId
-    {
-        get => m_BindingId;
-        set
-        {
-            m_BindingId = value;
-            UpdateBindingDisplay();
-        }
-    }
-
-    public TMP_Text bindingText { get => m_BindingText; }
-
-    /// <summary>
-    /// Trigger a refresh of the currently displayed binding.
-    /// </summary>
     public void UpdateBindingDisplay()
     {
         var displayString = string.Empty;
@@ -114,45 +68,40 @@ public class MouseControllerRebindKey : MonoBehaviour
         var controlPath = default(string);
 
         // Get display string from action.
-        var action = m_Action?.action;
+        var action = _actionToRebind?.action;
         if (action != null)
         {
-            var bindingIndex = action.bindings.IndexOf(x => x.id.ToString() == m_BindingId);
+            var bindingIndex = action.bindings.IndexOf(x => x.id.ToString() == _bindingID);
             if (bindingIndex != -1)
-                displayString = action.GetBindingDisplayString(bindingIndex, out deviceLayoutName, out controlPath, /*displayStringOptions*/DisplayStringOptions.DontUseShortDisplayNames);
+                displayString = action.GetBindingDisplayString(bindingIndex, out deviceLayoutName, out controlPath, /*displayStringOptions*/InputBinding.DisplayStringOptions.DontUseShortDisplayNames);
         }
 
         // Set on label
-        if (m_BindingText != null)
-            m_BindingText.text = displayString;
+        if (_bindingNameText != null)
+            _bindingNameText.text = displayString;
 
         // Give listeners a chance to configure UI in response.
-        m_UpdateBindingUIEvent?.Invoke(this, displayString, deviceLayoutName, controlPath);
+        _onUpdateBindingUIEvent?.Invoke(this, displayString, deviceLayoutName, controlPath);
     }
-
-
 
 
     /// <summary>
     /// Return the action and binding index for the binding that is targeted by the component
     /// according to
     /// </summary>
-    /// <param name="action"></param>
-    /// <param name="bindingIndex"></param>
-    /// <returns></returns>
     public bool ResolveActionAndBinding(out InputAction action, out int bindingIndex)
     {
         bindingIndex = -1;
 
-        action = m_Action?.action;
+        action = _actionToRebind?.action;
         if (action == null)
             return false;
 
-        if (string.IsNullOrEmpty(m_BindingId))
+        if (string.IsNullOrEmpty(_bindingID))
             return false;
 
         // Look up binding index.
-        var bindingId = new Guid(m_BindingId);
+        var bindingId = new Guid(_bindingID);
         bindingIndex = action.bindings.IndexOf(x => x.id == bindingId);
         if (bindingIndex == -1)
         {
@@ -163,9 +112,6 @@ public class MouseControllerRebindKey : MonoBehaviour
         return true;
     }
 
-    /// <summary>
-    /// Remove currently applied binding overrides.
-    /// </summary>
     public void ResetToDefault()
     {
         if (!ResolveActionAndBinding(out var action, out var bindingIndex))
@@ -184,11 +130,6 @@ public class MouseControllerRebindKey : MonoBehaviour
         UpdateBindingDisplay();
     }
 
-
-    /// <summary>
-    /// Initiate an interactive rebind that lets the player actuate a control to choose a new binding
-    /// for the action.
-    /// </summary>
     public void StartInteractiveRebind()
     {
         if (!ResolveActionAndBinding(out var action, out var bindingIndex))
@@ -211,14 +152,13 @@ public class MouseControllerRebindKey : MonoBehaviour
 
     private void EnableCursorSimulation(bool doEnable, InputAction action)
     {
+        // Don't let us use controller movement while rebinding
         RebindMouseController.IsRebinding = !doEnable;
-        //Debug.LogError("IsRebinding=" + RebindMouseController.IsRebinding);
-        // Allows rebinding the active action
+        // Disable the action when we begin because it's not possible to edit an active action
         if (doEnable)
             action.Enable();
         else
             action.Disable();
-        //Debug.LogWarning(" action is enabled: " + action.enabled);
     }
 
     private void PerformInteractiveRebind(InputAction action, int bindingIndex, bool allCompositeParts = false)
@@ -228,19 +168,16 @@ public class MouseControllerRebindKey : MonoBehaviour
         if (allCompositeParts)
             lastKeysName = action.bindings[bindingIndex - 1].name;
         
-
-
-        m_RebindOperation?.Cancel(); // Will null out m_RebindOperation.
-        //Debug.LogWarning(" action is enabled: " + action.enabled);
+        // Set the previous operation to null
+        _rebindOperation?.Cancel();
 
         void CleanUp()
         {
-            m_RebindOperation?.Dispose();
-            m_RebindOperation = null;
+            _rebindOperation?.Dispose();
+            _rebindOperation = null;
         }
 
-        // Configure the rebind.
-        m_RebindOperation = action.PerformInteractiveRebinding(bindingIndex)
+        _rebindOperation = action.PerformInteractiveRebinding(bindingIndex)
                                   .WithControlsExcluding("<Pointer>/delta")
                                   .WithControlsExcluding("<Pointer>/position")
                                   .WithControlsExcluding("<Touchscreen>/touch*/position")
@@ -254,7 +191,7 @@ public class MouseControllerRebindKey : MonoBehaviour
                                           // If we are making a composite and use the same key twice
                                           if (canditate.name.Equals(lastKeysName))
                                           {
-                                              m_OnAbortedMessage.Invoke("Tried to use the same key twice in a composite.");
+                                              _onRebindAbortedMessage.Invoke("Tried to use the same key twice in a composite.");
                                               rebindOperation.Cancel();
                                           }
                                       }
@@ -262,22 +199,22 @@ public class MouseControllerRebindKey : MonoBehaviour
                                   //.WithMatchingEventsBeingSuppressed();
 
         if (allCompositeParts)
-            m_RebindOperation = m_RebindOperation.OnMatchWaitForAnother(0.35f);
+            _rebindOperation = _rebindOperation.OnMatchWaitForAnother(0.35f);
 
-        m_RebindOperation = m_RebindOperation.OnCancel(operation =>
+        _rebindOperation = _rebindOperation.OnCancel(operation =>
                 {
-                    m_RebindStopEvent?.Invoke(this, operation);
-                    m_RebindOverlay?.SetActive(false);
+                    _onRebindEnded?.Invoke(this, operation);
+                    _rebindOverlay?.SetActive(false);
                     UpdateBindingDisplay();
                     CleanUp();
                     EnableCursorSimulation(true, action);
                 });
 
-        m_RebindOperation = m_RebindOperation.OnComplete(
+        _rebindOperation = _rebindOperation.OnComplete(
                 operation =>
                 {
-                    m_RebindOverlay?.SetActive(false);
-                    m_RebindStopEvent?.Invoke(this, operation);
+                    _rebindOverlay?.SetActive(false);
+                    _onRebindEnded?.Invoke(this, operation);
                     UpdateBindingDisplay();
                     CleanUp();
 
@@ -303,36 +240,36 @@ public class MouseControllerRebindKey : MonoBehaviour
             partName = $"Binding '{action.bindings[bindingIndex].name}'. ";
 
         // Bring up rebind overlay, if we have one.
-        m_RebindOverlay?.SetActive(true);
-        if (m_RebindText != null)
-            m_RebindText.text = $"{partName}Waiting for input...";
-        m_BindingText.text = "< Waiting... >";
+        _rebindOverlay?.SetActive(true);
+        if (_rebindOverlayMessage != null)
+            _rebindOverlayMessage.text = $"{partName}Waiting for input...";
+        _bindingNameText.text = "< Waiting... >";
 
 
         // Give listeners a chance to act on the rebind starting.
-        m_RebindStartEvent?.Invoke(this, m_RebindOperation);
+        _onRebindStart?.Invoke(this, _rebindOperation);
 
-        m_RebindOperation.Start();
+        _rebindOperation.Start();
     }
 
     protected void OnEnable()
     {
-        if (s_RebindActionUIs == null)
-            s_RebindActionUIs = new List<MouseControllerRebindKey>();
-        s_RebindActionUIs.Add(this);
-        if (s_RebindActionUIs.Count == 1)
+        if (_rebindActionUIs == null)
+            _rebindActionUIs = new List<MouseControllerRebindKey>();
+        _rebindActionUIs.Add(this);
+        if (_rebindActionUIs.Count == 1)
             InputSystem.onActionChange += OnActionChange;
     }
 
     protected void OnDisable()
     {
-        m_RebindOperation?.Dispose();
-        m_RebindOperation = null;
+        _rebindOperation?.Dispose();
+        _rebindOperation = null;
 
-        s_RebindActionUIs.Remove(this);
-        if (s_RebindActionUIs.Count == 0)
+        _rebindActionUIs.Remove(this);
+        if (_rebindActionUIs.Count == 0)
         {
-            s_RebindActionUIs = null;
+            _rebindActionUIs = null;
             InputSystem.onActionChange -= OnActionChange;
         }
     }
@@ -350,10 +287,10 @@ public class MouseControllerRebindKey : MonoBehaviour
         var actionMap = action?.actionMap ?? obj as InputActionMap;
         var actionAsset = actionMap?.asset ?? obj as InputActionAsset;
 
-        for (var i = 0; i < s_RebindActionUIs.Count; ++i)
+        for (var i = 0; i < _rebindActionUIs.Count; ++i)
         {
-            var component = s_RebindActionUIs[i];
-            var referencedAction = component.actionReference?.action;
+            var component = _rebindActionUIs[i];
+            var referencedAction = component.ActionToRebind?.action;
             if (referencedAction == null)
                 continue;
 
