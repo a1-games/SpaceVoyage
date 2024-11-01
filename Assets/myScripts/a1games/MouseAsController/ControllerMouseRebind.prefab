@@ -303,6 +303,7 @@ GameObject:
   - component: {fileID: 4913413208669999963}
   - component: {fileID: 2254738140733127765}
   - component: {fileID: 2946005772213663976}
+  - component: {fileID: 5807501794543534858}
   m_Layer: 5
   m_Name: ControllerMouseRebind
   m_TagString: Untagged
@@ -374,6 +375,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5807501794543534858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7976735233569951165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3942c0bd898063d488310fffeb13052b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _actions: {fileID: -944628639613478452, guid: e5777967b97b6f64781c54074f915820, type: 3}
 --- !u!1 &8251709909521159671
 GameObject:
   m_ObjectHideFlags: 0
@@ -553,11 +567,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6853470507794082029, guid: d383d5d4d45bc6e43a85a32078652f99, type: 3}
       propertyPath: m_text
-      value: D-Pad Up/D-Pad Left/D-Pad Down/D-Pad Right
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6853470507794082029, guid: d383d5d4d45bc6e43a85a32078652f99, type: 3}
       propertyPath: m_fontSize
-      value: 14
+      value: 36
       objectReference: {fileID: 0}
     - target: {fileID: 6950319295438047198, guid: d383d5d4d45bc6e43a85a32078652f99, type: 3}
       propertyPath: m_BindingId
@@ -571,6 +585,10 @@ PrefabInstance:
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8251709909521159671}
+    - target: {fileID: 6950319295438047198, guid: d383d5d4d45bc6e43a85a32078652f99, type: 3}
+      propertyPath: _mouseSimulationKeybind
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d383d5d4d45bc6e43a85a32078652f99, type: 3}
 --- !u!224 &3529908401850928969 stripped
@@ -679,11 +697,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6853470507794082029, guid: d383d5d4d45bc6e43a85a32078652f99, type: 3}
       propertyPath: m_text
-      value: Cross
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6853470507794082029, guid: d383d5d4d45bc6e43a85a32078652f99, type: 3}
       propertyPath: m_fontSize
-      value: 42.95
+      value: 36
       objectReference: {fileID: 0}
     - target: {fileID: 6950319295438047198, guid: d383d5d4d45bc6e43a85a32078652f99, type: 3}
       propertyPath: m_Action
@@ -809,11 +827,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6853470507794082029, guid: d383d5d4d45bc6e43a85a32078652f99, type: 3}
       propertyPath: m_text
-      value: R2
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6853470507794082029, guid: d383d5d4d45bc6e43a85a32078652f99, type: 3}
       propertyPath: m_fontSize
-      value: 42.95
+      value: 36
       objectReference: {fileID: 0}
     - target: {fileID: 6950319295438047198, guid: d383d5d4d45bc6e43a85a32078652f99, type: 3}
       propertyPath: m_Action
@@ -831,6 +849,10 @@ PrefabInstance:
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8251709909521159671}
+    - target: {fileID: 6950319295438047198, guid: d383d5d4d45bc6e43a85a32078652f99, type: 3}
+      propertyPath: _mouseSimulationKeybind
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d383d5d4d45bc6e43a85a32078652f99, type: 3}
 --- !u!224 &218155636793863075 stripped
@@ -941,6 +963,10 @@ PrefabInstance:
       propertyPath: m_RebindOverlay
       value: 
       objectReference: {fileID: 8251709909521159671}
+    - target: {fileID: 6950319295438047198, guid: d383d5d4d45bc6e43a85a32078652f99, type: 3}
+      propertyPath: _mouseSimulationKeybind
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d383d5d4d45bc6e43a85a32078652f99, type: 3}
 --- !u!224 &7270916997251869714 stripped

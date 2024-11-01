@@ -34,6 +34,8 @@ public class MouseControllerRebindKey : MonoBehaviour
         }
     }
 
+    [SerializeField] private MouseSimulationKeybind _mouseSimulationKeybind;
+
     [SerializeField] private TMP_Text _bindingNameText;
     public TMP_Text BindingNameText { get => _bindingNameText; }
 
@@ -51,7 +53,7 @@ public class MouseControllerRebindKey : MonoBehaviour
     private static List<MouseControllerRebindKey> _rebindActionUIs;
 
     [Serializable]
-    public class UpdateBindingUIEvent : UnityEvent<MouseControllerRebindKey, string, string, string> { }
+    public class UpdateBindingUIEvent : UnityEvent<string, string, string> { }
     [Serializable]
     public class InteractiveRebindEvent : UnityEvent<MouseControllerRebindKey, InputActionRebindingExtensions.RebindingOperation> { }
 
@@ -81,8 +83,34 @@ public class MouseControllerRebindKey : MonoBehaviour
             _bindingNameText.text = displayString;
 
         // Give listeners a chance to configure UI in response.
-        _onUpdateBindingUIEvent?.Invoke(this, displayString, deviceLayoutName, controlPath);
+        _onUpdateBindingUIEvent?.Invoke(displayString, deviceLayoutName, controlPath);
     }
+
+    private void SaveAllBindings()
+    {
+        var displayString = string.Empty;
+        var deviceLayoutName = default(string);
+        var controlPath = default(string);
+
+        // Get display string from action.
+        var action = _actionToRebind?.action;
+        if (action != null)
+        {
+            var bindingIndex = action.bindings.IndexOf(x => x.id.ToString() == _bindingID);
+            if (bindingIndex != -1)
+                displayString = action.GetBindingDisplayString(bindingIndex, out deviceLayoutName, out controlPath, /*displayStringOptions*/InputBinding.DisplayStringOptions.DontUseShortDisplayNames);
+
+
+            //LocalSave_MouseControllerBindings.SaveKey(displayString, deviceLayoutName, controlPath);
+            _bindingID = action.bindings[bindingIndex].id.ToString();
+            Debug.LogWarning("saving " + controlPath + " with ID: " + _bindingID);
+            //LocalSave_MouseControllerBindings.SaveAll();
+            LocalSave_MouseControllerBindings.SaveKey(_mouseSimulationKeybind, _bindingID, controlPath, bindingIndex);
+
+        }
+    }
+
+
 
 
     /// <summary>
@@ -142,7 +170,7 @@ public class MouseControllerRebindKey : MonoBehaviour
         {
             var firstPartIndex = bindingIndex + 1;
             if (firstPartIndex < action.bindings.Count && action.bindings[firstPartIndex].isPartOfComposite)
-                PerformInteractiveRebind(action, firstPartIndex, allCompositeParts: true);
+                PerformInteractiveRebind(action, firstPartIndex, true);
         }
         else
         {
@@ -163,13 +191,15 @@ public class MouseControllerRebindKey : MonoBehaviour
 
     private void PerformInteractiveRebind(InputAction action, int bindingIndex, bool allCompositeParts = false)
     {
+        // Set the previous operation to null
+        _rebindOperation?.Cancel();
+        //EnableCursorSimulation(false, action);
+
         // checking for the same keypress twice in a composite
         string lastKeysName = "";
         if (allCompositeParts)
             lastKeysName = action.bindings[bindingIndex - 1].name;
         
-        // Set the previous operation to null
-        _rebindOperation?.Cancel();
 
         void CleanUp()
         {
@@ -206,16 +236,17 @@ public class MouseControllerRebindKey : MonoBehaviour
                     _onRebindEnded?.Invoke(this, operation);
                     _rebindOverlay?.SetActive(false);
                     UpdateBindingDisplay();
-                    CleanUp();
                     EnableCursorSimulation(true, action);
+                    CleanUp();
                 });
 
         _rebindOperation = _rebindOperation.OnComplete(
                 operation =>
                 {
-                    _rebindOverlay?.SetActive(false);
                     _onRebindEnded?.Invoke(this, operation);
+                    _rebindOverlay?.SetActive(false);
                     UpdateBindingDisplay();
+                    SaveAllBindings();
                     CleanUp();
 
                     // If there's more composite parts we should bind, initiate a rebind
@@ -226,12 +257,16 @@ public class MouseControllerRebindKey : MonoBehaviour
                         if (nextBindingIndex < action.bindings.Count && action.bindings[nextBindingIndex].isPartOfComposite)
                             PerformInteractiveRebind(action, nextBindingIndex, true);
                         else // once we have gone through all keys in the composite
+                        {
                             EnableCursorSimulation(true, action);
+
+                        }
                     }
                     else // if we are not a composite
                     {
                         EnableCursorSimulation(true, action);
                     }
+                    
                 });
 
         // If it's a part binding, show the name of the part in the UI.
@@ -244,7 +279,6 @@ public class MouseControllerRebindKey : MonoBehaviour
         if (_rebindOverlayMessage != null)
             _rebindOverlayMessage.text = $"{partName}Waiting for input...";
         _bindingNameText.text = "< Waiting... >";
-
 
         // Give listeners a chance to act on the rebind starting.
         _onRebindStart?.Invoke(this, _rebindOperation);
@@ -259,6 +293,8 @@ public class MouseControllerRebindKey : MonoBehaviour
         _rebindActionUIs.Add(this);
         if (_rebindActionUIs.Count == 1)
             InputSystem.onActionChange += OnActionChange;
+        // Load saved custom keybind
+        LocalSave_MouseControllerBindings.LoadAndSetKeyOverride(_mouseSimulationKeybind);
     }
 
     protected void OnDisable()

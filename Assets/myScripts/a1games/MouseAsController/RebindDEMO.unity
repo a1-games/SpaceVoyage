@@ -416,6 +416,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 636060089}
     m_Modifications:
+    - target: {fileID: 348260159255116193, guid: 3357927906fbcbb4ca80d6552b758ab2, type: 3}
+      propertyPath: m_text
+      value: Left Stick
+      objectReference: {fileID: 0}
     - target: {fileID: 4304686204459947666, guid: 3357927906fbcbb4ca80d6552b758ab2, type: 3}
       propertyPath: _bindingID
       value: 821730cb-0fb7-4d14-a221-89227024a5fe
@@ -516,6 +520,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5314854172625171617, guid: 3357927906fbcbb4ca80d6552b758ab2, type: 3}
+      propertyPath: m_text
+      value: Cross
+      objectReference: {fileID: 0}
+    - target: {fileID: 5807501794543534858, guid: 3357927906fbcbb4ca80d6552b758ab2, type: 3}
+      propertyPath: _actions
+      value: 
+      objectReference: {fileID: -944628639613478452, guid: e5777967b97b6f64781c54074f915820, type: 3}
+    - target: {fileID: 5822864340665211642, guid: 3357927906fbcbb4ca80d6552b758ab2, type: 3}
+      propertyPath: m_text
+      value: D-Pad Up/D-Pad Left/D-Pad Down/D-Pad Right
+      objectReference: {fileID: 0}
     - target: {fileID: 6655517960335577379, guid: 3357927906fbcbb4ca80d6552b758ab2, type: 3}
       propertyPath: _bindingID
       value: 2aea57f4-483e-4559-af23-a5c94b8f4133
@@ -536,6 +552,10 @@ PrefabInstance:
       propertyPath: _rebindOverlayMessage
       value: 
       objectReference: {fileID: 55147898}
+    - target: {fileID: 7148677004337266192, guid: 3357927906fbcbb4ca80d6552b758ab2, type: 3}
+      propertyPath: m_text
+      value: R2
+      objectReference: {fileID: 0}
     - target: {fileID: 7976735233569951165, guid: 3357927906fbcbb4ca80d6552b758ab2, type: 3}
       propertyPath: m_Name
       value: ControllerMouseRebind

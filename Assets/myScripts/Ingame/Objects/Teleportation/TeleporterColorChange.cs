@@ -65,7 +65,9 @@ public class TeleporterColorChange : MonoBehaviour
             var col = color;
             Color startCol = particleSystems[i].main.startColor.color;
             col.a = startCol.a;
-            particleSystems[i].startColor = col;
+            ParticleSystem.MainModule psmain = particleSystems[i].main;
+            // this might not do anything but the last version was deprecated so I'm trying to fix it
+            psmain.startColor = col;
         }
     }
 

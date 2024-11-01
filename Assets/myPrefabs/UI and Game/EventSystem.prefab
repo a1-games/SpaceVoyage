@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 8822185708758919426}
   - component: {fileID: 8822185708758919427}
   - component: {fileID: 8822185708758919487}
-  - component: {fileID: 3917584077460522102}
   - component: {fileID: 8822185708758919484}
   m_Layer: 0
   m_Name: EventSystem
@@ -110,25 +109,6 @@ MonoBehaviour:
   OnLeftClickUp_WithController:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &3917584077460522102
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8822185708758919424}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c0c54d8c1a285c4b9ca0f68d19a4e54, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerInput: {fileID: 8822185708758919484}
-  inputActionMap:
-    m_Name: Input
-    m_Id: c66e56af-ff10-4528-b082-93deaec2a6ea
-    m_Asset: {fileID: 0}
-    m_Actions: []
-    m_Bindings: []
 --- !u!114 &8822185708758919484
 MonoBehaviour:
   m_ObjectHideFlags: 0

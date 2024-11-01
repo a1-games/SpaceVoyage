@@ -16,6 +16,7 @@ using UnityEngine.InputSystem;
 public class MouseControllerRebindKeyEditor : Editor
 {
     private SerializedProperty _actionToRebind;
+    private SerializedProperty _mouseSimulationKeybind;
     private SerializedProperty _bindingID;
     private SerializedProperty _bindingNameText;
     private SerializedProperty _rebindOverlay;
@@ -27,7 +28,6 @@ public class MouseControllerRebindKeyEditor : Editor
     //private SerializedProperty m_DisplayStringOptionsProperty;
 
     private GUIContent m_BindingLabel = new GUIContent("Binding");
-    private GUIContent m_DisplayOptionsLabel = new GUIContent("Display Options");
     private GUIContent m_UILabel = new GUIContent("UI");
     private GUIContent m_EventsLabel = new GUIContent("Events");
     private GUIContent[] m_BindingOptions;
@@ -42,6 +42,7 @@ public class MouseControllerRebindKeyEditor : Editor
     protected void OnEnable()
     {
         _actionToRebind = serializedObject.FindProperty("_actionToRebind");
+        _mouseSimulationKeybind = serializedObject.FindProperty("_mouseSimulationKeybind");
         _bindingID = serializedObject.FindProperty("_bindingID");
         _bindingNameText = serializedObject.FindProperty("_bindingNameText");
         _rebindOverlay = serializedObject.FindProperty("_rebindOverlay");
@@ -78,6 +79,7 @@ public class MouseControllerRebindKeyEditor : Editor
         EditorGUILayout.LabelField(m_UILabel, Styles.boldLabel);
         using (new EditorGUI.IndentLevelScope())
         {
+            EditorGUILayout.PropertyField(_mouseSimulationKeybind);
             EditorGUILayout.PropertyField(_bindingNameText);
             EditorGUILayout.PropertyField(_rebindOverlayMessage);
             EditorGUILayout.PropertyField(_rebindOverlay);

@@ -19,8 +19,8 @@ public class LaserBeam : MonoBehaviour, IRespawnable
     private float rayMagnitude;
 
     private bool canKill = false;
-    private float savedTime;
-    private float shootCooldown = 0f;
+    //private float savedTime;
+    //private float shootCooldown = 0f;
 
     public Vector3 DirectionVec { get => directionVec; }
     private Vector3 directionVec;

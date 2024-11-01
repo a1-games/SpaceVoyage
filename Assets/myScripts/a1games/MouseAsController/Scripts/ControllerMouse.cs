@@ -108,7 +108,6 @@ public class CustomInspectorControllerMouse : Editor
 // If you beat me to it, please send your script to me @ customerhelp.a1a3@gmail.com ! I will add it as an update.
 // Also, feel free to suggest improvements to the code !
 
-[RequireComponent(typeof(RebindMouseController))]
 [System.Serializable]
 public class ControllerMouse : MonoBehaviour
 {
@@ -180,7 +179,7 @@ public class ControllerMouse : MonoBehaviour
         else
             Destroy(this.gameObject);
 
-        _rebindMouseController = this.GetComponent<RebindMouseController>();
+        //_rebindMouseController = this.GetComponent<RebindMouseController>();
         //_rebindMouseController.FakeAwake(OnSimulateMouse, OnLeftClick);
     }
 

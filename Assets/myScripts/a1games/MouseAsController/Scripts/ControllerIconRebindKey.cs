@@ -21,7 +21,7 @@ public class ControllerIconRebindKey : MonoBehaviour
         _mouseControllerRebind.UpdateBindingDisplay();
     }
 
-    protected void OnUpdateBindingDisplay(MouseControllerRebindKey component, string bindingDisplayString, string deviceLayoutName, string controlPath)
+    protected void OnUpdateBindingDisplay(string bindingDisplayString, string deviceLayoutName, string controlPath)
     {
         if (string.IsNullOrEmpty(deviceLayoutName) || string.IsNullOrEmpty(controlPath))
             return;

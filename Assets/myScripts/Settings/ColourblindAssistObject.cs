@@ -10,7 +10,6 @@ public class ColourblindAssistObject : MonoBehaviour
 {
     [SerializeField] private bool idleRotation = false;
     [SerializeField] private Direction rightOrLeft = Direction.Right;
-    [SerializeField] private float idleRotationCd = 1f;
     [Tooltip("If this is null, script uses gameobject it is attached to instead")] 
     [SerializeField] private GameObject colourblindAssistObject;
     private Coroutine routine;
