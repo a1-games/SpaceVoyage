@@ -63,6 +63,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_MoveRepeatDelay: 0.5
   m_MoveRepeatRate: 0.1
+  m_XRTrackingOrigin: {fileID: 0}
   m_ActionsAsset: {fileID: -944628639613478452, guid: e5777967b97b6f64781c54074f915820, type: 3}
   m_PointAction: {fileID: 195648819140143216, guid: e5777967b97b6f64781c54074f915820, type: 3}
   m_MoveAction: {fileID: 4752226186683490315, guid: e5777967b97b6f64781c54074f915820, type: 3}
@@ -207,7 +208,7 @@ MonoBehaviour:
     m_ActionId: 385345e1-dfae-4831-9bb4-c2420ace1298
     m_ActionName: Mouse Simulation With Controller1/Mouse Click Simulation
   m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
+  m_DefaultControlScheme: GameControls
   m_DefaultActionMap: Mouse Simulation With Controller
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
