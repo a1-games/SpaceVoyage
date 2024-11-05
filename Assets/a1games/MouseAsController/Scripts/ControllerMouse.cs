@@ -64,7 +64,7 @@ public class CustomInspectorControllerMouse : Editor
         GUILayout.Space(5);
         _controllerMouseScript._cursorBehaviour = (ControllerMouse.ControllerMouseSpeedBehaviour)GUILayout.Toolbar((int)_controllerMouseScript._cursorBehaviour, new string[] { ((ControllerMouse.ControllerMouseSpeedBehaviour)0).ToString(), ((ControllerMouse.ControllerMouseSpeedBehaviour)1).ToString() });
         GUILayout.Space(5);
-        _controllerMouseScript.ControllerMouseSpeed = EditorGUILayout.FloatField(new GUIContent("Controller Mouse Speed"), _controllerMouseScript.ControllerMouseSpeed);
+        _controllerMouseScript.ControllerMouseDefaultSpeed = EditorGUILayout.FloatField(new GUIContent("Controller Mouse Speed"), _controllerMouseScript.ControllerMouseDefaultSpeed);
         GUILayout.Space(5);
         _controllerMouseScript.StickDriftThreshhold = EditorGUILayout.FloatField(new GUIContent("Stick Drift Threshhold"), _controllerMouseScript.StickDriftThreshhold);
         GUILayout.Space(5);
@@ -109,6 +109,7 @@ public class CustomInspectorControllerMouse : Editor
 public class ControllerMouse : MonoBehaviour
 {
     public static bool IsRebinding { get; set; }
+    public static float ControllerMouseSpeedMultiplier { get; set; } = 1f;
     // The reason this is set to false is so that you can use the script
     // in level scenes when testing, and not have it cause errors
     // when you load the scene from your menu where you also have the script.
@@ -130,11 +131,11 @@ public class ControllerMouse : MonoBehaviour
         }
     }
 
-    // All of this is just to make the inspector more readable. It could literally just be a bool.
+    // All of this is just to make the inspector more readable. It could literally just be one bool.
     public enum ControllerMouseSpeedBehaviour { SensitiveSpeed, ConstantSpeed, }
     [SerializeField] public ControllerMouseSpeedBehaviour _cursorBehaviour;
     private bool ConstantMouseSpeed { get => _cursorBehaviour == ControllerMouseSpeedBehaviour.ConstantSpeed; }
-    [field: SerializeField] public float ControllerMouseSpeed { get; set; } = 8f;
+    [field: SerializeField] public float ControllerMouseDefaultSpeed { get; set; } = 10f;
 
     // How many seconds after releasing the stick should we stop moving?
     // (Stick issues can trigger release on random frames if this isn't above 0)
@@ -208,7 +209,7 @@ public class ControllerMouse : MonoBehaviour
             //Mouse.current.WarpCursorPosition(mousePosition);
 
             // This is Windows cursor. it triggers all events as a mouse would
-            var mouseTravel = mouseDirection * ControllerMouseSpeed * Time.unscaledDeltaTime * 100f;
+            var mouseTravel = mouseDirection * ControllerMouseDefaultSpeed * ControllerMouseSpeedMultiplier * Time.unscaledDeltaTime * 100f;
             MouseOperations.MouseMoveEvent(new MouseOperations.MousePoint((int)mouseTravel.x, -(int)mouseTravel.y));
         }
     }

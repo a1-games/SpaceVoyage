@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FirstSelected: {fileID: 0}
-  m_sendNavigationEvents: 1
+  m_sendNavigationEvents: 0
   m_DragThreshold: 10
 --- !u!114 &8822185708758919427
 MonoBehaviour:
@@ -92,7 +92,7 @@ MonoBehaviour:
   _dontDestroy: 0
   _debugComments: 0
   _cursorBehaviour: 0
-  <ControllerMouseSpeed>k__BackingField: 10
+  <ControllerMouseSpeed>k__BackingField: 10.5
   <TimeBeforeStopMovingStick>k__BackingField: 0.01
   <StickDriftThreshhold>k__BackingField: 0.05
   OnStartedCursorMove_WithController:
