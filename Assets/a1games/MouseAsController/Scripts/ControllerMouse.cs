@@ -174,10 +174,12 @@ public class ControllerMouse : MonoBehaviour
         if (instance == null)
             instance = this;
         else
+        {
             Destroy(this.gameObject);
-
-        //_rebindMouseController = this.GetComponent<RebindMouseController>();
-        //_rebindMouseController.FakeAwake(OnSimulateMouse, OnLeftClick);
+            // reload the scripts that were removed from priority by this.gameObject
+            instance.gameObject.SetActive(false);
+            instance.gameObject.SetActive(true);
+        }
     }
 
 
@@ -186,7 +188,7 @@ public class ControllerMouse : MonoBehaviour
         if (IsRebinding) return;
         if (stoppedMovingStick)
         {
-            stoppedMovingStickTimer += Time.deltaTime;
+            stoppedMovingStickTimer += Time.unscaledDeltaTime;
             if (stoppedMovingStickTimer >= TimeBeforeStopMovingStick)
             {
                 stoppedMovingStick = false;
@@ -201,8 +203,13 @@ public class ControllerMouse : MonoBehaviour
 
         if (isMovingControllerMouse)
         {
-            mousePosition = (Vector2)Input.mousePosition + mouseDirection * ControllerMouseSpeed * Time.deltaTime * 100f;
-            Mouse.current.WarpCursorPosition(mousePosition);
+            // This is the strictly Unity way of doing it (at least, i think so). It will not record OnMouseEnter in UI!
+            //mousePosition = (Vector2)Input.mousePosition + mouseDirection * ControllerMouseSpeed * Time.unscaledDeltaTime * 100f;
+            //Mouse.current.WarpCursorPosition(mousePosition);
+
+            // This is Windows cursor. it triggers all events as a mouse would
+            var mouseTravel = mouseDirection * ControllerMouseSpeed * Time.unscaledDeltaTime * 100f;
+            MouseOperations.MouseMoveEvent(new MouseOperations.MousePoint((int)mouseTravel.x, -(int)mouseTravel.y));
         }
     }
 

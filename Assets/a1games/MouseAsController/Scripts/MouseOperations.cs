@@ -44,19 +44,6 @@ public class MouseOperations
         SetCursorPos(point.X, point.Y);
     }
 
-    public static void SimulateLeftClick()
-    {
-        MouseEvent(MouseEventFlags.LeftDown | MouseEventFlags.LeftUp);
-    }
-    public static void SimulateMiddletClick()
-    {
-        MouseEvent(MouseEventFlags.MiddleDown | MouseEventFlags.MiddleUp);
-    }
-    public static void SimulateRighttClick()
-    {
-        MouseEvent(MouseEventFlags.RightDown | MouseEventFlags.RightUp);
-    }
-
     public static MousePoint GetCursorPosition()
     {
         MousePoint currentMousePoint;
@@ -71,6 +58,17 @@ public class MouseOperations
 
         mouse_event
             ((int)value,
+             position.X,
+             position.Y,
+             0,
+             0)
+            ;
+    }
+
+    public static void MouseMoveEvent(MousePoint position)
+    {
+        mouse_event
+            ((int)MouseEventFlags.Move,
              position.X,
              position.Y,
              0,
